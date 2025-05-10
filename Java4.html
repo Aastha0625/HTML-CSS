@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Slideshow</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            background-color: #e2e9e2;
+        }
+
+        .slideshow-container {
+            position: relative;
+            width: 500px;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .buttons {
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            background: #007bff;
+            color: white;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>HILL STATIONS</h1>
+
+    <div class="slideshow-container">
+        <img id="slideshow" src="https://imgs.search.brave.com/XLwMgnMuAD5QJFX036I0DSfnBN9Nfffmj0aFd03TMG4/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by9y/b2FkLWRvd24taGls/bF8xMzUzLTI0Ny5q/cGc_c2VtdD1haXNf/aHlicmlk" alt="Slideshow Image">
+    </div>
+
+    <div class="buttons">
+        <button onclick="prevImage()">Previous</button>
+        <button onclick="nextImage()">Next</button>
+    </div>
+
+    <script>
+        // Array of image URLs
+        const images = [
+            "https://imgs.search.brave.com/-YAVezwY4LNWCNxK4NpFfC4khXWG2kFbv67wre7HWHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTI3/NzgyMDAyMS9waG90/by90b3Atc3RhdGlv/bi12aWV3LXBvaW50/LW11bm5hci1rZXJh/bGEuanBnP3M9NjEy/eDYxMiZ3PTAmaz0y/MCZjPU9GQ19ja1BB/TVpvaXpCQlk3N3I0/QWgtdV9fWVlDeFEx/QnZPTEZ5My1vTFk9",
+            "https://imgs.search.brave.com/B4btbZ0iPFcE2fEONpLRhBfdP4FDXV5kQgjm7Gkd-u0/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTA5/NTM0NTY0Ni9waG90/by9oaWxsLXN0YXRp/b24tdmlsbGFnZS5q/cGc_cz02MTJ4NjEy/Jnc9MCZrPTIwJmM9/Ull4eF9uem90b3ph/bUszNjRpMDlnOHpn/OU81ZW8yN2Q4Qzdv/Wm9KbmhSRT0",
+            "https://imgs.search.brave.com/QYSMMIs7ElBAzdTaQYi-m-R74jrb9RicT7FsTTWunBU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTI5/NjI5NjYxNS9waG90/by9jb2xvcmZ1bC1o/aWxsLXN0YXRpb24t/YW5kLWNsb3VkeS1i/bHVlLXNreS5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9SG4x/WXZkR2R6WkU4ZWQw/NERfbVhGTG1qeWtN/U3lvZVpCcF9HbllT/LUk0ND0",
+            "https://imgs.search.brave.com/HgzOTnbDtdvJExdiAVCEB2hvOg3Ufhb3wLmEQq5Bmjc/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93d3cu/dHJhd2VsbC5pbi9p/bWFnZXMvcGljcy9p/bmRpYV9oc19tYWlu/LmpwZw"
+        ];
+
+        let currentIndex = 0;
+        const imgElement = document.getElementById("slideshow");
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            imgElement.src = images[currentIndex];
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            imgElement.src = images[currentIndex];
+        }
+    </script>
+
+</body>
+</html>

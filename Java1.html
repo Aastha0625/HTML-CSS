@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Landing Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+        .light-mode {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="container">
+        <h1 id="welcome-message">Welcome to Our Interactive Page!</h1>
+        <button id="change-text-btn">Change Text</button>
+        <button id="theme-toggle-btn">Switch to Dark Mode</button>
+    </div>
+
+    <script>
+        // Get elements
+        const changeTextButton = document.getElementById("change-text-btn");
+        const themeToggleButton = document.getElementById("theme-toggle-btn");
+        const welcomeMessage = document.getElementById("welcome-message");
+        const body = document.body;
+
+        // Toggle theme
+        let isDarkMode = false;
+        themeToggleButton.addEventListener("click", () => {
+            isDarkMode = !isDarkMode;
+
+            if (isDarkMode) {
+                body.classList.remove("light-mode");
+                body.classList.add("dark-mode");
+                themeToggleButton.textContent = "Switch to Light Mode";
+            } else {
+                body.classList.remove("dark-mode");
+                body.classList.add("light-mode");
+                themeToggleButton.textContent = "Switch to Dark Mode";
+            }
+        });
+
+        // Change text on button click
+        changeTextButton.addEventListener("click", () => {
+            welcomeMessage.textContent = "We offer various facilities!";
+        });
+    </script>
+</body>
+</html>

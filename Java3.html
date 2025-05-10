@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            margin-top: 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Registration Form</h2>
+        <form id="registration-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name">
+            <div class="error" id="name-error"></div>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email">
+            <div class="error" id="email-error"></div>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password">
+            <div class="error" id="password-error"></div>
+
+            <label for="confirm-password">Confirm Password:</label>
+            <input type="password" id="confirm-password">
+            <div class="error" id="confirm-password-error"></div>
+
+            <button type="submit">Register</button>
+        </form>
+        <div class="success" id="success-message"></div>
+    </div>
+
+    <script>
+        document.getElementById("registration-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Stop form submission
+
+            // Get input values
+            let name = document.getElementById("name").value.trim();
+            let email = document.getElementById("email").value.trim();
+            let password = document.getElementById("password").value;
+            let confirmPassword = document.getElementById("confirm-password").value;
+
+            // Error message elements
+            let nameError = document.getElementById("name-error");
+            let emailError = document.getElementById("email-error");
+            let passwordError = document.getElementById("password-error");
+            let confirmPasswordError = document.getElementById("confirm-password-error");
+            let successMessage = document.getElementById("success-message");
+
+            // Reset error messages
+            nameError.textContent = "";
+            emailError.textContent = "";
+            passwordError.textContent = "";
+            confirmPasswordError.textContent = "";
+            successMessage.textContent = "";
+
+            let isValid = true;
+
+            // Validate Name (Required)
+            if (name === "") {
+                nameError.textContent = "Name is required.";
+                isValid = false;
+            }
+
+            // Validate Email (Correct format)
+            if (!/^\S+@\S+\.\S+$/.test(email)) {
+                emailError.textContent = "Enter a valid email address.";
+                isValid = false;
+            }
+
+            // Validate Password (Minimum 6 characters)
+            if (password.length < 6) {
+                passwordError.textContent = "Password must be at least 6 characters.";
+                isValid = false;
+            }
+
+            // Validate Confirm Password (Must match password)
+            if (password !== confirmPassword) {
+                confirmPasswordError.textContent = "Passwords do not match.";
+                isValid = false;
+            }
+
+            // If all inputs are valid, show success message
+            if (isValid) {
+                successMessage.textContent = "Form Submitted Successfully!";
+            }
+        });
+    </script>
+</body>
+</html>
