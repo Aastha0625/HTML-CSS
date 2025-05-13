@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Catalog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-bg: #121212;
+            --secondary-bg: #1E1E1E;
+            --accent-color: #F5C518;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B3B3B3;
+            --badge-new: #e53935;
+            --badge-anime: #8e24aa;
+            --badge-fan: #fbc02d;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        .header {
+            background-color: var(--secondary-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            width: 40px;
+            margin-right: 10px;
+        }
+        .search-container {
+            display: flex;
+            flex-grow: 1;
+            max-width: 600px;
+            margin: 0 20px;
+            position: relative;
+        }
+        .search-bar {
+            width: 100%;
+            padding: 10px 50px 10px 20px;
+            border-radius: 25px;
+            border: none;
+            background-color: #2C2C2C;
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .movie-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+            padding: 20px 0;
+        }
+        .movie-card {
+            background-color: var(--secondary-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .movie-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+        .movie-image-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .movie-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+        .badges {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .badge.new {
+            background-color: var(--badge-new);
+        }
+        .badge.anime {
+            background-color: var(--badge-anime);
+        }
+        .badge.fan {
+            background-color: var(--badge-fan);
+            color: var(--primary-bg);
+        }
+        .movie-info {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .movie-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .movie-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .movie-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            margin-top: 8px;
+            flex: 1;
+        }
+        .rating {
+            display: flex;
+            align-items: center;
+            color: var(--accent-color);
+        }
+        .rating i {
+            margin-right: 5px;
+        }
+        .filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .category-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .btn {
+            padding: 8px 15px;
+            background-color: #2C2C2C;
+            color: var(--text-primary);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background-color: var(--accent-color);
+            color: var(--primary-bg);
+        }
+        .btn.active {
+            background-color: var(--accent-color);
+            color: var(--primary-bg);
+        }
+        .btn-new {
+            border-left: 3px solid var(--badge-new);
+        }
+        .btn-anime {
+            border-left: 3px solid var(--badge-anime);
+        }
+        .btn-fan {
+            border-left: 3px solid var(--badge-fan);
+        }
+        .btn-reset {
+            background-color: #444;
+        }
+        .btn-reset:hover {
+            background-color: #666;
+            color: var(--text-primary);
+        }
+        .genre-select, .year-select {
+            background-color: #2C2C2C;
+            color: var(--text-primary);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        @media (max-width: 768px) {
+            .filter-section {
+                flex-direction: column;
+            }
+            .movie-list {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            .movie-card img {
+                height: 240px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/575px-IMDB_Logo_2016.svg.png" alt="MovieDB Logo">
+            MovieDB
+        </div>
+        <div class="search-container">
+            <input type="text" id="search" class="search-bar" placeholder="Search for movies...">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Movies</a>
+            <a href="#">TV Shows</a>
+            <a href="#">My List</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="filter-section">
+            <div class="filter-container">
+                <select id="genre-filter" class="genre-select">
+                    <option value="">All Genres</option>
+                </select>
+                <select id="year-filter" class="year-select">
+                    <option value="">All Years</option>
+                    <option value="2020">2020s</option>
+                    <option value="2010">2010s</option>
+                    <option value="2000">2000s</option>
+                    <option value="1990">1990s</option>
+                </select>
+                <button id="sort-rating" class="btn">Top Rated</button>
+            </div>
+            <div class="category-buttons">
+                <button id="recent-releases" class="btn btn-new">Recent Releases</button>
+                <button id="anime" class="btn btn-anime">Anime</button>
+                <button id="fan-favorites" class="btn btn-fan">Fan Favorites</button>
+                <button id="reset-filters" class="btn btn-reset">Reset All</button>
+            </div>
+        </div>
+        <div id="movies" class="movie-list">
+            <!-- Movie cards will be generated here -->
+        </div>
+    </div>
+
+    <script>
+        const movies = [
+            { 
+                title: "Inception", 
+                year: 2010, 
+                rating: 8.8, 
+                genre: "sci-fi",
+                image: "https://image.tmdb.org/t/p/w500/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
+                description: "A thief who enters the dreams of others to steal secrets from their subconscious.",
+                isRecentRelease: false,
+                isAnime: false,
+                isFanFavorite: true
+            },
+            { 
+                title: "Interstellar", 
+                year: 2014, 
+                rating: 8.6, 
+                genre: "sci-fi",
+                image: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+                description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+                isRecentRelease: false,
+                isAnime: false,
+                isFanFavorite: true
+            },
+            { 
+                title: "The Dark Knight", 
+                year: 2008, 
+                rating: 9.0, 
+                genre: "action",
+                image: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+                description: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham.",
+                isRecentRelease: false,
+                isAnime: false,
+                isFanFavorite: true
+            },
+            { 
+                title: "The Matrix", 
+                year: 1999, 
+                rating: 8.7, 
+                genre: "sci-fi",
+                image: "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+                description: "A computer programmer discovers that reality as he knows it is a simulation created by machines.",
+                isRecentRelease: false,
+                isAnime: false,
+                isFanFavorite: true
+            },
+            { 
+                title: "Pulp Fiction", 
+                year: 1994, 
+                rating: 8.9, 
+                genre: "drama",
+                image: "https://image.tmdb.org/t/p/w500/d5iIlFn5s0HV8Vg0Ut4ntPUNkn.jpg",
+                description: "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine.",
+                isRecentRelease: false,
+                isAnime: false,
+                isFanFavorite: false
+            },
+            { 
+                title: "Dune: Part Two", 
+                year: 2024, 
+                rating: 8.5, 
+                genre: "sci-fi",
+                image: "https://image.tmdb.org/t/p/w500/8b8R8l88Qje9dn9OE8PY05Nxl1X.jpg",
+                description: "Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.",
+                isRecentRelease: true,
+                isAnime: false,
+                isFanFavorite: false
+            },
+            { 
+                title: "Oppenheimer", 
+                year: 2023, 
+                rating: 8.4, 
+                genre: "drama",
+                image: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
+                description: "The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb.",
+                isRecentRelease: true,
+                isAnime: false,
+                isFanFavorite: false
+            },
+            { 
+                title: "Spirited Away", 
+                year: 2001, 
+                rating: 8.6, 
+                genre: "animation",
+                image: "https://image.tmdb.org/t/p/w500/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg",
+                description: "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits.",
+                isRecentRelease: false,
+                isAnime: true,
+                isFanFavorite: true
+            },
+            { 
+                title: "Your Name", 
+                year: 2016, 
+                rating: 8.4, 
+                genre: "animation",
+                image: "https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg",
+                description: "Two teenagers share a profound, magical connection upon discovering they are swapping bodies.",
+                isRecentRelease: false,
+                isAnime: true,
+                isFanFavorite: true
+            },
+            { 
+                title: "Attack on Titan: The Final Season", 
+                year: 2023, 
+                rating: 9.1, 
+                genre: "animation",
+                image: "https://image.tmdb.org/t/p/w500/sHim6U0ANsbzxcmNRYuIubBVQaz.jpg",
+                description: "The final confrontation between the forces of humanity and the Titans.",
+                isRecentRelease: true,
+                isAnime: true,
+                isFanFavorite: true
+            }
+        ];
+
+        const movieContainer = document.getElementById('movies');
+        const searchInput = document.getElementById('search');
+        const genreFilter = document.getElementById('genre-filter');
+        const yearFilter = document.getElementById('year-filter');
+        const sortRatingBtn = document.getElementById('sort-rating');
+        const recentReleasesBtn = document.getElementById('recent-releases');
+        const animeBtn = document.getElementById('anime');
+        const fanFavoritesBtn = document.getElementById('fan-favorites');
+
+        function displayMovies(movieArray) {
+            movieContainer.innerHTML = '';
+            movieArray.forEach(movie => {
+                const movieElement = document.createElement('div');
+                movieElement.classList.add('movie-card');
+                
+                // Add special badges to movies
+                let badges = '';
+                if (movie.isRecentRelease) {
+                    badges += '<span class="badge new">New</span>';
+                }
+                if (movie.isAnime) {
+                    badges += '<span class="badge anime">Anime</span>';
+                }
+                if (movie.isFanFavorite) {
+                    badges += '<span class="badge fan">Fan Favorite</span>';
+                }
+                
+                movieElement.innerHTML = `
+                    <div class="movie-image-container">
+                        <img src="${movie.image}" alt="${movie.title}">
+                        <div class="badges">${badges}</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">${movie.title}</div>
+                        <div class="movie-details">
+                            <span>${movie.year}</span>
+                            <div class="rating">
+                                <i class="fas fa-star"></i> ${movie.rating}
+                            </div>
+                        </div>
+                        <div class="movie-description">${movie.description}</div>
+                    </div>
+                `;
+                movieContainer.appendChild(movieElement);
+            });
+        }
+
+        function filterMovies() {
+            let filteredMovies = movies.filter(movie => {
+                const searchQuery = searchInput.value.toLowerCase();
+                const genreQuery = genreFilter.value;
+                const yearQuery = yearFilter.value;
+
+                const titleMatch = movie.title.toLowerCase().includes(searchQuery);
+                const genreMatch = !genreQuery || movie.genre === genreQuery;
+                const yearMatch = !yearQuery || 
+                    (yearQuery === "2020" && movie.year >= 2020) ||
+                    (yearQuery === "2010" && movie.year >= 2010 && movie.year < 2020) ||
+                    (yearQuery === "2000" && movie.year >= 2000 && movie.year < 2010) ||
+                    (yearQuery === "1990" && movie.year >= 1990 && movie.year < 2000);
+
+                return titleMatch && genreMatch && yearMatch;
+            });
+
+            displayMovies(filteredMovies);
+        }
+
+        function updateGenreOptions() {
+            // Get unique genres from movies array
+            const genres = [...new Set(movies.map(movie => movie.genre))];
+            
+            // Clear existing options except the default one
+            while (genreFilter.options.length > 1) {
+                genreFilter.remove(1);
+            }
+            
+            // Add genre options
+            genres.forEach(genre => {
+                const option = document.createElement('option');
+                option.value = genre;
+                option.textContent = genre.charAt(0).toUpperCase() + genre.slice(1); // Capitalize first letter
+                genreFilter.appendChild(option);
+            });
+        }
+
+        function resetActiveButtons() {
+            // Remove active class from all filter buttons
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+        }
+
+        // Event Listeners
+        searchInput.addEventListener('input', () => {
+            resetActiveButtons();
+            filterMovies();
+        });
+
+        genreFilter.addEventListener('change', () => {
+            resetActiveButtons();
+            filterMovies();
+        });
+
+        yearFilter.addEventListener('change', () => {
+            resetActiveButtons();
+            filterMovies();
+        });
+
+        sortRatingBtn.addEventListener('click', () => {
+            resetActiveButtons();
+            sortRatingBtn.classList.add('active');
+            const sortedMovies = [...movies].sort((a, b) => b.rating - a.rating);
+            displayMovies(sortedMovies);
+        });
+
+        // New filter buttons
+        recentReleasesBtn.addEventListener('click', () => {
+            resetActiveButtons();
+            recentReleasesBtn.classList.add('active');
+            const recentMovies = movies.filter(movie => movie.isRecentRelease);
+            displayMovies(recentMovies);
+        });
+
+        animeBtn.addEventListener('click', () => {
+            resetActiveButtons();
+            animeBtn.classList.add('active');
+            const animeMovies = movies.filter(movie => movie.isAnime);
+            displayMovies(animeMovies);
+        });
+
+        fanFavoritesBtn.addEventListener('click', () => {
+            resetActiveButtons();
+            fanFavoritesBtn.classList.add('active');
+            const favoriteMovies = movies.filter(movie => movie.isFanFavorite);
+            displayMovies(favoriteMovies);
+        });
+
+        // Reset button to show all movies
+        document.getElementById('reset-filters').addEventListener('click', () => {
+            resetActiveButtons();
+            searchInput.value = '';
+            genreFilter.value = '';
+            yearFilter.value = '';
+            displayMovies(movies);
+        });
+
+        // Initialize the page
+        updateGenreOptions();
+        displayMovies(movies);
+    </script>
+</body>
+</html>
